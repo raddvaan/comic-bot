@@ -30,9 +30,21 @@ class AppWindow:
 	clearicon = PhotoImage(file="icons\\clear26.png")
 	sortdirold = ""
 	sortdirnew = ""
-	curevent = ""
-	revval = {"revo1":False,"revo2":False,"revn1":False,"revn2":False,"reve1":False}
+	eventdict  = {}
+	revval = {"revo1":False,
+				"revo2":False,
+				"revn1":False,
+				"revn2":False,
+				"reve1":False}
 	comictypes = [".cbr",".cbz"]
+
+	renamevar = BooleanVar()
+	sortvar = BooleanVar()
+	incyearvar = BooleanVar()
+	delorigvar = BooleanVar()
+
+
+	
 	#initj#
 	def __init__(self, master):
 		self.master = master
@@ -55,31 +67,45 @@ class AppWindow:
 		self.optionmenu.add_command(label="Set Filetypes",command=self.clear_ftype_choose)
 		self.filemenu.add_command(label = "Exit", command = self.master.quit)
 
-		self.statusbar = Label(self.master, text = "", bd=1, relief=SUNKEN,anchor = W)
-		self.statusbar.pack(side=BOTTOM,fill = X)
+		self.statusbar = Label(self.master,
+			text = "", bd=1, relief=SUNKEN,anchor = W)
+		self.statusbar.pack(side=BOTTOM,
+			fill = X)
 
-		self.toolframe = Frame(self.mainwin,bd=2)
-		self.fileframe = Frame(self.mainwin,bd=1,relief=SUNKEN,)
+		self.toolframe = Frame(self.mainwin,
+			bd=2)
+		self.fileframe = Frame(self.mainwin,
+			bd=1,relief=SUNKEN,)
 		
-		self.optionframe = Frame(self.fileframe, width = 95,bd = 2,relief=RAISED)
-		self.filepanes = PanedWindow(self.fileframe,orient=HORIZONTAL,sashwidth=5,bd=1,bg="light grey")
+		self.optionframe = Frame(self.fileframe,
+			width = 95,bd = 2,relief=RAISED)
+		self.filepanes = PanedWindow(self.fileframe,
+			orient=HORIZONTAL,sashwidth=5,bd=1,bg="light grey")
 		
-		self.option1 = Frame(self.optionframe,width=100,bg='grey',relief=SUNKEN)
-		self.option2 = Frame(self.optionframe,width=100,bg='grey')
-		self.option3 = Frame(self.optionframe,width=100,bg='grey')
-		self.option4 = Frame(self.optionframe,width=100,bg='grey')
+		self.option1 = Frame(self.optionframe,
+			width=100,bg='grey',relief=SUNKEN)
+		self.option2 = Frame(self.optionframe,
+			width=100,bg='grey')
+		self.option3 = Frame(self.optionframe,
+			width=100,bg='grey')
+		self.option4 = Frame(self.optionframe,
+			width=100,bg='grey')
 		self.o1cbf = Frame(self.option1)
 		self.o2cbf = Frame(self.option2)
 		self.o3cbf = Frame(self.option3)
 		self.o4cbf = Frame(self.option4)
-		self.o1cb = Checkbutton(self.o1cbf,bd=1)
-		self.o2cb = Checkbutton(self.o2cbf,bd=1)
-		self.o3cb = Checkbutton(self.o3cbf,bd=1)
-		self.o4cb = Checkbutton(self.o4cbf,bd=1)
-		self.o1cbl = Label(self.o1cbf,text = "Rename")
-		self.o2cbl = Label(self.o2cbf,text = "Move")
-		self.o3cbl = Label(self.o3cbf,text= "Incl. Year")
-		self.o4cbl = Label(self.o4cbf,text="Delete Orig")
+		self.o1cb = Checkbutton(self.o1cbf,bd=1,variable=self.renamevar)
+		self.o2cb = Checkbutton(self.o2cbf,bd=1,variable=self.sortvar)
+		self.o3cb = Checkbutton(self.o3cbf,bd=1,variable=self.incyearvar)
+		self.o4cb = Checkbutton(self.o4cbf,bd=1,variable=self.delorigvar)
+		self.o1cbl = Label(self.o1cbf,
+			text = "Rename")
+		self.o2cbl = Label(self.o2cbf,
+			text = "Sort")
+		self.o3cbl = Label(self.o3cbf,
+			text= "Incl. Year")
+		self.o4cbl = Label(self.o4cbf,
+			text="Delete Orig")
 		self.option1.pack(fill=X)
 		self.option2.pack(fill=X)
 		self.option3.pack(fill=X)
@@ -101,8 +127,10 @@ class AppWindow:
 		self.o4cb.select()
 
 
-		self.oldwin = Frame(self.filepanes, bg = 'grey',bd=1,width = 470)
-		self.newwin = Frame(self.filepanes, bg = 'grey',bd=1)
+		self.oldwin = Frame(self.filepanes,
+			bg = 'grey',bd=1,width = 470)
+		self.newwin = Frame(self.filepanes,
+			bg = 'grey',bd=1)
 		
 		self.filepanes.add(self.oldwin)
 		self.filepanes.add(self.newwin)
@@ -165,11 +193,15 @@ class AppWindow:
 
 
 		self.conmenu = Menu(self.master)
-		self.conmenu.add_command(label="Edit Issue",command=lambda:self.custom_edit_title("new"))
-		self.conmenu.add_command(label="Print Tags",command=self.print_issue_tags)
+		self.conmenu.add_command(label="Edit Issue",
+			command=lambda:self.custom_edit_title("new"))
+		self.conmenu.add_command(label="Print Tags",
+			command=self.print_issue_tags)
 		self.conmenold = Menu(self.master)
-		self.conmenold.add_command(label="Edit Issue",command=lambda:self.custom_edit_title("old"))
-		self.conmenold.add_command(label="Show file in Explorer",command=self.open_select_file)
+		self.conmenold.add_command(label="Edit Issue",
+			command=lambda:self.custom_edit_title("old"))
+		self.conmenold.add_command(label="Show file in Explorer",
+			command=self.open_select_file)
 		
 		self.scanbar = ttk.Progressbar(self.statusbar,length=200)
 		self.scanbar.pack(side=RIGHT,padx = 2,pady = 2)
@@ -187,7 +219,9 @@ class AppWindow:
 		print(event.keycode)
 		event = str(event.keycode)
 		
-		self.shortcutdict = {"79" : self.open_file_old,"78" : self.open_file_new,"69": self.custom_edit_title}
+		self.shortcutdict = {"79" : self.open_file_old,
+							"78" : self.open_file_new,
+							"69": self.custom_edit_title}
 		
 		try:
 			
@@ -211,7 +245,8 @@ class AppWindow:
 			sumfiles.extend(files)
 		tfiles = len(sumfiles)
 		apptime = round(tfiles * 0.013)
-		self.statusbar.config(text="Scanning ~"+str(tfiles)+" files. Approx. time "+str(apptime)+"s")
+		self.statusbar.config(text="Scanning ~"+ str(tfiles)+
+							" files. Approx. time "+str(apptime)+"s")
 		#self.sortdirold = self.olddir
 		self.clear_tree("old")
 		self.clear_tree("new")
@@ -223,7 +258,9 @@ class AppWindow:
 		#print(self.stitleids)
 		self.scanbar.stop()
 		endtime=time.time()
-		self.statusbar.config(text="Done. Processed "+ str(tfiles) + " files in " + str(round(endtime-starttime,2	))+"s")
+		self.statusbar.config(text="Done. Processed "
+					+ str(tfiles) + " files in " + 
+					str(round(endtime-starttime,2	))+"s")
 		
 		
 		timetaken=round(endtime-starttime,2	)
@@ -241,6 +278,7 @@ class AppWindow:
 	
 
 	def pop_tree(self,parent,path):
+		#pdb.set_trace()
 		pathlist = os.listdir(path)
 		for item in pathlist:
 			abspath = os.path.normpath(os.path.join(path,item))
@@ -259,6 +297,10 @@ class AppWindow:
 
 					searchstatus,stitleid = self.tree_search(title)
 					if searchstatus == 'true':
+						curfc = self.newtree.item(stitleid,"values")[0]
+						#print(curfc)
+						curfc = int(curfc) + 1
+						self.newtree.item(stitleid,values=[curfc])
 						treenewi = self.newtree.insert(stitleid,'end',text=fname,iid=treein,
 												tags=("issue",str(issue),
 														 "series",str(title),
@@ -270,7 +312,9 @@ class AppWindow:
 														 "filetype",filetype))
 						self.scanbar.step()
 					elif searchstatus == 'false':
-						treenews = self.newtree.insert('','end',text=title,iid= self.stitle_id_gen(title),tags=('dir',title))
+						seriesid = self.stitle_id_gen(title)
+						treenews = self.newtree.insert('','end',text=title,
+											iid= seriesid,tags=('dir',title),values=[0])
 						treenewi = self.newtree.insert(treenews,'end',text=fname,iid=treein,
 										tags=('issue',str(issue),
 												 "series",str(title),
@@ -280,6 +324,7 @@ class AppWindow:
 												 "publisher",publisher,
 												 "subtitle",subtitle,
 												 "filetype",filetype))
+						self.newtree.item(seriesid,values=[1])
 
 						self.scanbar.step()
 
@@ -290,10 +335,11 @@ class AppWindow:
 			
 		return
 
+
 	def move_item(self,iid):
 		series = self.newtree.item(iid,"tags")[3]
 		pstatus,newpid = self.tree_search(series)
-		#print("NEWPID" + newpid)
+
 		if pstatus == "false":
 			newpid = self.stitle_id_gen(series)
 			self.newtree.insert('','end',text=series,iid=newpid,tags=('dir',series))
@@ -310,10 +356,12 @@ class AppWindow:
 			itemid = ''
 			for itemid in self.newtree.get_children():
 				if stitle == self.newtree.item(itemid)["text"]:
-					return 'true',itemid
+					
 					status = 'true'
 					itemid = itemid
+					
 					return status, itemid
+
 				else:
 					status = 'false'
 					itemid = ''
@@ -351,8 +399,10 @@ class AppWindow:
 				
 				self.newtree.delete(*self.newtree.get_children(''))
 			else:
+
 				return
 		else:
+
 			return
 	
 
@@ -441,13 +491,12 @@ class AppWindow:
 
 	def test_but(self):
 		
-		
 		return
 
 	def tv_sort(self,tree,column,reverse):
-		treedict = {"old":self.oldtree,"new":self.newtree,"edit":self.sissuestv}
+		treedict = {"old":"self.oldtree","new":"self.newtree","edit":"self.sissuestv"}
 		children = {}
-		stree = treedict[tree]
+		stree = eval(treedict[tree])
 		rev = self.revval[reverse]
 		
 		
@@ -505,7 +554,8 @@ class AppWindow:
 			self.addtypeb.bind("<Button-1>",self.add_to_type_list)
 		
 		print(self.comictypes)
-	
+		return
+
 	def add_to_type_list(self,event):
 		newitem = self.newetype.get()
 		if newitem in self.typelist.get(0,END):
@@ -521,7 +571,8 @@ class AppWindow:
 	def delete_type(self,event):
 		fid = self.typelist.curselection()
 		self.typelist.delete(fid)
-		#print(fid)
+		
+		return
 
 
 	def set_typediag_none(self):
@@ -829,7 +880,7 @@ class AppWindow:
 		if newitem == "":
 			return
 		self.populate_edit_screen([newitem],tree)
-		#print(advdict[direct](iid))
+		#print(advdict[direct](iid))B
 		#print(self.oldtree.index(iid))
 		return
 
@@ -963,10 +1014,12 @@ class AppWindow:
 
 
 	def name_scrub(self,dname,filetype): 
-		print(dname)
+		#print(dname)
 
 		isevent = 0
-		incyear = 1
+		self.incyear = self.incyearvar.get()
+		
+		
 		strippedname = re.sub(filetype,"",dname)
 		strippedname = re.sub("[\%\_\^]"," ",strippedname)
 		strippedname = strippedname.replace("#","")
@@ -1011,11 +1064,11 @@ class AppWindow:
 		return dname, fname, title, subtitle, issue,"", fvol,issyr,"",filetype
 
 	def name_builder(self,series,subtitle,fvol,issue,issyr,filetype):
-		incyear = 1
+		
 		if issyr == "":
 			fyear = ""
 		else:
-			if incyear == 1:
+			if self.incyear:
 				fyear = " (" + issyr + ")"
 			else:
 				fyear = ""
@@ -1032,11 +1085,10 @@ class AppWindow:
 
 
 	def event_handler(self,dname):
-		global curevent
-		
+		 		
 		try:
 			eviss = re.search("\A\d{1,3}[\s-]",dname).group(0)
-			isevent = "1"
+			isevent = 1
 			
 			namenoevent = dname[re.search("\A\d{1,3}[\s-]",dname).span()[1]:len(dname)]
 			
@@ -1053,10 +1105,13 @@ class AppWindow:
 
 
 		except:	
-			#print("EXCEPT")
-			return dname,"","",""
+			
+			return dname,0,"",""
 		print("NAMEN" + namenoevent)
+		
 		return namenoevent,isevent, eviss, evtitle
+
+
 
 	def scan_folder(self,location):
 		
@@ -1139,7 +1194,7 @@ class AppWindow:
 
 
 	def title_cracker(self,dname):
-		print(dname)
+		#print(dname)
 		title = dname
 		return title
 
@@ -1204,7 +1259,7 @@ class AppWindow:
 			dashfind = re.search(" - ", dname).span()[0]
 			issuein = re.search(issue, dname).span()[0] - 1
 			subtitle = dname[dashfind:issuein]
-			print(subtitle)
+			#print(subtitle)
 			ctitle = re.sub(subtitle,"",title)
 			
 			
@@ -1212,8 +1267,8 @@ class AppWindow:
 		except:
 			ctitle = title
 			subtitle = "false"
-		print("TITLE " + ctitle)
-		print("SUB " + subtitle)
+		#print("TITLE " + ctitle)
+		#print("SUB " + subtitle)
 		return ctitle, subtitle
 
 
