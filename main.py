@@ -933,7 +933,7 @@ class AppWindow:
                 "", 'end', text=value, iid=key,
                 tags=self.newtree.item(key, "tags"))
 
-            self.sissuestv.itemconfig(0, bg=coldict[alternate])
+            #self.sissuestv.itemconfig(0, bg=coldict[alternate])
             alternate = not alternate
         self.multissues = 0
 
