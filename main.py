@@ -11,6 +11,7 @@ import subprocess
 import pdb
 import time
 # import ComicBot as CB
+# PUSH IT 
 x = 0
 versionstring = "V.0.0.3"
 root = Tk()
@@ -48,6 +49,7 @@ class AppWindow:
     sortvar = BooleanVar()
     incyearvar = BooleanVar()
     delorigvar = BooleanVar()
+    sortdict = {"title":1,"series":3,"volume":5,"event":7}
 
     # initj#
     def __init__(self, master):
@@ -1203,9 +1205,9 @@ class AppWindow:
 
     def event_handler(self, dname):
         # pdb.set_trace()
-
-        eviss = re.search(
-            "\A\d{1, 3}(\.\d{1,2})?[\s]-?", dname)
+        print("EVENT")
+        print(self.curevent)
+        eviss = re.search("\A\d{1,3}(\.\d{1,2})?[\s]-?", dname)
 
         if eviss is not None:
             eviss = eviss.group(0)
@@ -1215,6 +1217,7 @@ class AppWindow:
             self.notitle = True
 
             self.cureventlist.append(dname)
+
             if self.curevent == "":
                 evtitle = tksd.askstring("Event Detected", "Event Title?")
                 self.curevent = evtitle
@@ -1230,9 +1233,11 @@ class AppWindow:
             return namenoevent, self.isevent, eviss, evtitle
         else:
             if self.cureventlist != []:
+                print(self.eventdict)
                 self.eventdict[self.curevent] = self.cureventlist
                 self.cureventlist = []
             self.isevent = False
+            self.curevent = ""
 
             return dname, False, "", ""
 
@@ -1358,7 +1363,6 @@ class AppWindow:
         try:
             volobj = re.search("\s?v(ol)?\s?\d{1,2}", dname, re.IGNORECASE)
             volume = volobj.group(0)
-            
 
             volumeno = re.search("\d{1,2}", volume).group(0)
             # print(volumeno)
@@ -1368,8 +1372,7 @@ class AppWindow:
                 volume = "V0" + volumeno
             namenovol = re.sub(volobj.group(0), "", dname)
             print("NOVOL" + namenovol)
-            volume = re.sub(" ","",volume)
-            
+            volume = re.sub(" ", "", volume)
 
             return volume, namenovol
         except:
