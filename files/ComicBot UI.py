@@ -11,7 +11,7 @@ import pdb
 import time
 #import ComicBot as CB
 x = 0
-versionstring = "V.0.0.2"
+versionstring = "V.0.0.3"
 root = Tk()
 Pmw.initialise(root)
 root.wm_iconbitmap('icons\\multiappicon.ico')
@@ -19,8 +19,8 @@ root.title("ComicBot" + " - " + versionstring)
 DEBUGMODE = 0
 DEBUGPATH = 'E:\\Comics\\Ultimate Marvel\\Ultimate Sort'
 
-#subprocess.Popen(r'explorer /select,' + DEBUGPATH )
-#os.system('explorer ' + '"' + DEBUGPATH + '"')
+# subprocess.Popen(r'explorer /select,' + DEBUGPATH )
+# os.system('explorer ' + '"' + DEBUGPATH + '"')
 
 
 class AppWindow:
