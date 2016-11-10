@@ -683,6 +683,7 @@ class AppWindow:
         return
 
     def set_typediag_none(self):
+        print("HELLO")
         self.comictypes = self.typelist.get(0, END)
         self.settypediag.destroy()
         self.settypediag = None
@@ -1219,7 +1220,8 @@ class AppWindow:
             self.cureventlist.append(dname)
 
             if self.curevent == "":
-                evtitle = tksd.askstring("Event Detected", "Event Title?")
+                #evtitle = tksd.askstring("Event Detected", "Event Title?")
+                self.ask_event_title(dname)
                 self.curevent = evtitle
             else:
                 evtitle = self.curevent
@@ -1247,9 +1249,19 @@ class AppWindow:
         return namenoevent, self.isevent, eviss, evtitle
 
     def ask_event_title(self, dname):
-        askwin = Toplevel()
+        self.askwin = Toplevel(root)
+        eventEntry = Entry(askwin)
+        eventEntry.pack()
+        self.askwin.wm_protocol(
+                "WM_DELETE_WINDOW",
+                self.event_title_close(eventEntry.get()))
 
         return "title"
+
+    def event_title_close(self, ename):
+
+        print("HELLLLO")
+        return
 
     def scan_folder(self, location):
 
