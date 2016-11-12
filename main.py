@@ -347,6 +347,7 @@ class AppWindow:
             "s")
 
         timetaken = round(endtime - starttime, 2)
+        print(self.eventdict)
         print(timetaken)
         return
 
@@ -360,7 +361,7 @@ class AppWindow:
         return
 
     def pop_tree(self, parent, path):
-        #pdb.set_trace()
+        # pdb.set_trace()
         pathlist = os.listdir(path)
         for item in pathlist:
             abspath = os.path.normpath(os.path.join(path, item))
@@ -1218,20 +1219,14 @@ class AppWindow:
             self.notitle = True
 
             self.cureventlist.append(dname)
-
+            
             if self.curevent == "":
-                #evtitle = tksd.askstring("Event Detected", "Event Title?")
-                self.ask_event_title(dname)
+                evtitle = "Event " + str(len(self.eventdict) + 1)
+
                 self.curevent = evtitle
             else:
                 evtitle = self.curevent
 
-            # while self.notitle == True:
-            #     x = 1
-
-            # namenoevent = dname[re.search("\A\d{1,3}[\s-]", dname).span()[1]:len(dname)]
-
-            # eviss = re.sub("\D", "", eviss)
             return namenoevent, self.isevent, eviss, evtitle
         else:
             if self.cureventlist != []:
@@ -1249,19 +1244,29 @@ class AppWindow:
         return namenoevent, self.isevent, eviss, evtitle
 
     def ask_event_title(self, dname):
-        self.askwin = Toplevel(root)
-        eventEntry = Entry(askwin)
+        print(self.pause)
+        self.askwin = Toplevel()
+
+        eventEntry = Entry(self.askwin)
+
         eventEntry.pack()
-        self.askwin.wm_protocol(
-                "WM_DELETE_WINDOW",
-                self.event_title_close(eventEntry.get()))
+        #self.askwin.wm_protocol(
+        #    "WM_DELETE_WINDOW",
+        #    self.event_title_close(eventEntry.get()))
+        self.closeBut = Button(self.askwin, text="ASS",command=lambda:self.event_title_close(dname))
+        self.closeBut.pack()
+        
 
         return "title"
 
     def event_title_close(self, ename):
-
+        self.askwin.destroy()
+        self.pause = False
+        print(self.pause)
         print("HELLLLO")
         return
+
+
 
     def scan_folder(self, location):
 
