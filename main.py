@@ -11,6 +11,7 @@ import subprocess
 import pdb
 import time
 # import ComicBot as CB
+# PUSH IT 
 x = 0
 versionstring = "V.0.0.3"
 root = Tk()
@@ -48,6 +49,7 @@ class AppWindow:
     sortvar = BooleanVar()
     incyearvar = BooleanVar()
     delorigvar = BooleanVar()
+    sortdict = {"title":1,"series":3,"volume":5,"event":7}
 
     # initj#
     def __init__(self, master):
@@ -345,6 +347,7 @@ class AppWindow:
             "s")
 
         timetaken = round(endtime - starttime, 2)
+        print(self.eventdict)
         print(timetaken)
         return
 
@@ -358,7 +361,7 @@ class AppWindow:
         return
 
     def pop_tree(self, parent, path):
-        #pdb.set_trace()
+        # pdb.set_trace()
         pathlist = os.listdir(path)
         for item in pathlist:
             abspath = os.path.normpath(os.path.join(path, item))
@@ -681,6 +684,7 @@ class AppWindow:
         return
 
     def set_typediag_none(self):
+        print("HELLO")
         self.comictypes = self.typelist.get(0, END)
         self.settypediag.destroy()
         self.settypediag = None
@@ -1203,9 +1207,9 @@ class AppWindow:
 
     def event_handler(self, dname):
         # pdb.set_trace()
-
-        eviss = re.search(
-            "\A\d{1, 3}(\.\d{1,2})?[\s]-?", dname)
+        print("EVENT")
+        print(self.curevent)
+        eviss = re.search("\A\d{1,3}(\.\d{1,2})?[\s]-?", dname)
 
         if eviss is not None:
             eviss = eviss.group(0)
@@ -1215,24 +1219,22 @@ class AppWindow:
             self.notitle = True
 
             self.cureventlist.append(dname)
+            
             if self.curevent == "":
-                evtitle = tksd.askstring("Event Detected", "Event Title?")
+                evtitle = "Event " + str(len(self.eventdict) + 1)
+
                 self.curevent = evtitle
             else:
                 evtitle = self.curevent
 
-            # while self.notitle == True:
-            #     x = 1
-
-            # namenoevent = dname[re.search("\A\d{1,3}[\s-]", dname).span()[1]:len(dname)]
-
-            # eviss = re.sub("\D", "", eviss)
             return namenoevent, self.isevent, eviss, evtitle
         else:
             if self.cureventlist != []:
+                print(self.eventdict)
                 self.eventdict[self.curevent] = self.cureventlist
                 self.cureventlist = []
             self.isevent = False
+            self.curevent = ""
 
             return dname, False, "", ""
 
@@ -1242,9 +1244,29 @@ class AppWindow:
         return namenoevent, self.isevent, eviss, evtitle
 
     def ask_event_title(self, dname):
-        askwin = Toplevel()
+        print(self.pause)
+        self.askwin = Toplevel()
+
+        eventEntry = Entry(self.askwin)
+
+        eventEntry.pack()
+        #self.askwin.wm_protocol(
+        #    "WM_DELETE_WINDOW",
+        #    self.event_title_close(eventEntry.get()))
+        self.closeBut = Button(self.askwin, text="ASS",command=lambda:self.event_title_close(dname))
+        self.closeBut.pack()
+        
 
         return "title"
+
+    def event_title_close(self, ename):
+        self.askwin.destroy()
+        self.pause = False
+        print(self.pause)
+        print("HELLLLO")
+        return
+
+
 
     def scan_folder(self, location):
 
@@ -1358,7 +1380,6 @@ class AppWindow:
         try:
             volobj = re.search("\s?v(ol)?\s?\d{1,2}", dname, re.IGNORECASE)
             volume = volobj.group(0)
-            
 
             volumeno = re.search("\d{1,2}", volume).group(0)
             # print(volumeno)
@@ -1368,8 +1389,7 @@ class AppWindow:
                 volume = "V0" + volumeno
             namenovol = re.sub(volobj.group(0), "", dname)
             print("NOVOL" + namenovol)
-            volume = re.sub(" ","",volume)
-            
+            volume = re.sub(" ", "", volume)
 
             return volume, namenovol
         except:
